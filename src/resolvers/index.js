@@ -18,37 +18,15 @@ module.exports = {
     id: parent => parent.objectid,
     name: parent => parent.name,
     thumbnailUrl: parent => parent.squareimageurl,
-    imageUrl: ({ objectid }) => {
-      return axios
-        .get(
-          `https://www.boardgamegeek.com/xmlapi2/thing?id=${objectid}&stats=1`
-        )
-        .then(result => parseStringPromise(result.data))
-        .then(data => data.items.item[0].thumbnail[0])
-        .catch(error => {
-          console.log('error HotGame imageUrl: ', error)
-        })
+    imageUrl: ({ objectid }, _, { dataSources }) => {
+      return dataSources.xmlAPI2
+        .getGame(objectid)
+        .then(result => result.thumbnail[0])
     },
-    description: ({ objectid }) => {
-      return axios
-        .get(
-          `https://www.boardgamegeek.com/xmlapi2/thing?id=${objectid}&stats=1`
-        )
-        .then(result => parseStringPromise(result.data))
-        .then(data => data.items.item[0].description[0])
-        .catch(error => {
-          console.log('error HotGame description: ', error)
-        })
+    description: ({ objectid }, _, { dataSources }) => {
+      return dataSources.xmlAPI2
+        .getGame(objectid)
+        .then(result => result.description[0])
     },
-    // imageUrl: ({ objectid }) => {
-    //   return axios
-    //     .get(
-    //       `https://api.geekdo.com/api/geekmarket/products?ajax=1&nosession=1&objectid=${objectid}&objecttype=thing`
-    //     )
-    //     .then(({ data }) => data.linkeditem.image.images.small.src)
-    //     .catch(error => {
-    //       console.log('error imageUrl: ', error)
-    //     })
-    // },
   },
 }
