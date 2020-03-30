@@ -2,6 +2,16 @@ const axios = require('axios')
 
 module.exports = {
   Query: {
+    searchGame: (_, args) => {
+      return axios
+        .get(
+          `https://boardgamegeek.com/search/boardgame?q=${args.name}&showcount=1`
+        )
+        .then(({ data }) => data.items[0])
+        .catch(error => {
+          console.log('error hotGames: ', error)
+        })
+    },
     hotGames: () => {
       return axios
         .get(
@@ -24,6 +34,11 @@ module.exports = {
           console.log('error similarGames: ', error)
         })
     },
+  },
+  SearchGameResult: {
+    id: parent => parent.objectid,
+    bggHref: parent => `https://boardgamegeek.com${parent.href}`,
+    yearPublished: parent => parent.yearpublished,
   },
   HotGame: {
     id: parent => parent.objectid,

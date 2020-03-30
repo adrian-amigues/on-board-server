@@ -1,6 +1,19 @@
 const { gql } = require('apollo-server')
 
 module.exports = gql`
+  type Query {
+    searchGame(name: String!): SearchGameResult
+    hotGames: [HotGame]
+    similarGames(id: ID!): [SimilarGame]
+  }
+
+  type SearchGameResult {
+    id: ID!
+    name: String
+    bggHref: String
+    yearPublished: Int
+  }
+
   type HotGame {
     id: ID!
     bggHref: String
@@ -22,10 +35,5 @@ module.exports = gql`
     rank: Int
     rating: Float
     weight: Float
-  }
-
-  type Query {
-    hotGames: [HotGame]
-    similarGames(id: ID!): [SimilarGame]
   }
 `
